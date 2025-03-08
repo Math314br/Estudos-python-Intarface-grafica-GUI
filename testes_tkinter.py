@@ -6,6 +6,7 @@ from tkinter import messagebox
 def exibir_nome():
     nome = entry_nome.get()
     print(f"Nome: {nome}")
+    return nome
 #checkbox basico
 def checkbox():
     idade = check.get()
@@ -14,22 +15,35 @@ def checkbox():
     else:
         idade="NÃO, É MENOR DE IDADE"    
     print(f"É maior de idade ? {idade}")
+    return idade
 #radio
 def exibir_radio():
     opcao = radio.get()
     print(f"Mora No Estado: {opcao}")
+    return opcao
 #listbox
 def exibir_lista():
     item_selecionado = listbox.curselection()#obtem iten selecionado
     if item_selecionado:
         item = listbox.get(item_selecionado)
         print(f"Tipo Sanguino:{item}")
+    return item 
 
+
+def exibir_mensagem():
+    nome = exibir_nome()
+    maior = checkbox()
+    estado = exibir_radio()
+    sangue = exibir_lista()
+
+    mensagem_user =(f"Aqui Estão Todas As Informaçoes: Nome: {nome} \n Maior De Idade: {maior} \n Estado: {estado}  \n Tipo De Sangue: {sangue}")
+    
+    messagebox.showinfo("Todas Informações Do User", mensagem_user)
 
 # criar janela principal
 root = tk.Tk()
 root.title("TESTES TKINTER") # titulo do programa
-root.geometry('1280x720') # tamanho da janela
+root.geometry('320x480') # tamanho da janela
 
 
 #widgets basicos
@@ -66,13 +80,18 @@ botao_radio = tk.Button(root, text='Exibir Estado: ',command=exibir_radio)
 botao_radio.pack()
 
 #criando listbox
-listbox = tk.Listbox(root)
+listbox = tk.Listbox(root, height=3)
 listbox.pack()
-listbox.insert(tk.END,'item 1')
-listbox.insert(tk.END,'item 1')
-listbox.insert(tk.END,'item 1')
+listbox.insert(tk.END,'Tipo A')
+listbox.insert(tk.END,'Tipo B')
+listbox.insert(tk.END,'Tipo C')
 
-listabox_botao = tk.Button(root, text='exibir seleção: ', command=exibir_lista)
+listabox_botao = tk.Button(root, text='exibir tipo sangue: ', command=exibir_lista)
 listabox_botao.pack()
+#criar botao  q exiba todos dados em uma tela de mensagem para user
+#botao que exiba todas  informçao na tela atraves de uma janela de mensagem para user.
+botao_mensagem = tk.Button(root,text='EXIBIR TUDO',command=exibir_mensagem)
+botao_mensagem.pack()
+
 
 root.mainloop()
