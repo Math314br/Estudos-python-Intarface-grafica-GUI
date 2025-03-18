@@ -2,6 +2,7 @@
 import tkinter as tk
 from tkinter import ttk
 from APP_BANCODADOS import APPBD
+from  criar_tabela import conexao, mycursor
 
 class Principal:
     def __init__(self,root,db):
@@ -43,7 +44,7 @@ class Principal:
         self.tree.heading('NOME', text='Nome')
         self.tree.heading('PRECO', text='Preço')
         self.tree.grid(row=5, column=0,columnspan=2)
-        self.tree.bind('<ButtonRelease-1>',self.aprensentar)
+        self.tree.bind('<ButtonRelease-1>',self.apresentar)
 
         self.carregarDados()
 
@@ -52,14 +53,14 @@ class Principal:
         codigo = self.entryCodigo.get()
         nome = self.entrynome.get()
         preco = self.entrypreco.get()
-        self.db.inserir_dados(nome,preco)
+        self.db.inserir_dados(codigo,nome,preco)
         self.tree.insert("","end",values=(codigo,nome,preco))
         self.LimparProduto()
     def AtualizarProduto(self):
         codigo = self.entryCodigo.get()
         nome = self.entrynome.get()
         preco = self.entrypreco.get()
-        self.db.inserir_dados(nome,preco)
+        self.db.atualizar_dados(codigo,nome,preco)
         self.tree.insert("","end",values=(codigo,nome,preco))
         self.LimparProduto()
         self.carregarDados()
@@ -67,6 +68,7 @@ class Principal:
         codigo = self.entryCodigo.get()
         self.db.excluir_dados(codigo)
         self.LimparProduto()
+        self.carregarDados()
     def LimparProduto(self):
         self.entryCodigo.delete(0,tk.END)
         self.entrynome.delete(0,tk.END)
@@ -74,7 +76,7 @@ class Principal:
 
         # FUNÇAO NAO FORAM PEGAS AINDAA!!!!!!!!
     
-    def aprensentar(self, event):
+    def apresentar(self, event):
         item = self.tree.selection()[0]
         valores = self.tree.item(item, 'values')
         self.entryCodigo.delete(0,tk.END)
@@ -89,7 +91,9 @@ class Principal:
         registros = self.db.selecionar_dados()
         for registro in registros:
             self.tree.insert("","end", values=registro)
+
+app_db = APPBD(conexao,mycursor)
 root = tk.Tk()
-app = APPBD()
-app_gui = Principal(root,app)
+
+app_gui = Principal(root,app_db)
 root.mainloop()    
